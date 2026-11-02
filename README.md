@@ -13,7 +13,32 @@ npm run preview
 
 ## 기사 추가
 
-`content/articles/<category>/YYYY-MM-DD-<slug>.md` 파일을 추가합니다. 기존 기사의 frontmatter를 그대로 따르면 됩니다.
+`content/articles/<category>/YYYY-MM-DD-<slug>.md` 파일을 추가합니다.
+
+```markdown
+---
+title: 기사 제목
+category: llm
+type: paper
+source_name: arXiv
+source_url: https://arxiv.org/abs/0000.00000
+published_at: "2026-11"
+collected_at: "2026-11-02"
+collected_by: manual
+summarized_by: 작성자
+reviewed_by: ""
+status: published
+summary: 목록에 표시할 한 줄 요약
+tldr:
+  - 첫째 줄
+  - 둘째 줄
+  - 셋째 줄
+---
+
+## 왜 중요한가
+
+본문
+```
 
 - `category`: `embedder`, `llm`, `compression`, `agent`
 - `type`: `paper`, `release`, `guide`

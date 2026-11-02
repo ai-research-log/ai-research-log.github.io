@@ -78,7 +78,7 @@ function render() {
     .replaceChildren(
       ...(visible.length
         ? visible.map(articleItem)
-        : [el('p', 'empty', '이 조건에 맞는 기사가 없습니다. 다른 필터를 선택해 보세요.')]),
+        : [el('p', 'empty', articles.length ? '이 조건에 맞는 기사가 없습니다. 다른 필터를 선택해 보세요.' : '아직 게시한 기사가 없습니다.')]),
     );
 }
 
