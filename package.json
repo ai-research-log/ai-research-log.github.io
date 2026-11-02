@@ -1,0 +1,13 @@
+{
+  "name": "jhwang-llm-site",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "node scripts/build.mjs",
+    "preview": "npm run build && npx --yes serve@14.2.4 dist"
+  },
+  "dependencies": {
+    "gray-matter": "4.0.3",
+    "marked": "14.1.4"
+  }
+}
