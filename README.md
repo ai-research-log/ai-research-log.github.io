@@ -1,4 +1,4 @@
-# jhwang-llm.github.io
+# ai-research-log.github.io
 
 Embedder, LLM, 경량화, Agent 분야의 AI 기술 동향을 모아 요약하는 정적 사이트입니다.
 
