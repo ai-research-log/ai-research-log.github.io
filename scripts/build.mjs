@@ -135,7 +135,7 @@ function renderIndex(articles, config) {
       <h2>이 아카이브를 운영하는 사람</h2>
       <p>${escapeHtml(owner)} · ${escapeHtml(config.ownerSummary)}</p>
     </div>
-    <a href="${escapeHtml(config.githubUrl)}">GitHub 프로필</a>
+    <a href="mailto:${escapeHtml(config.ownerEmail)}">${escapeHtml(config.ownerEmail)}</a>
   </section>
 </main>
 <script src="assets/app.js" defer></script>`,
