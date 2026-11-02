@@ -52,7 +52,7 @@ function articleItem(article) {
   const badges = el('div', 'badges');
   badges.append(
     el('span', article.via === '자동 수집' ? 'badge badge-auto' : 'badge badge-manual', article.via),
-    el('span', 'badge', article.reviewed ? '사람 검토 완료' : '검토 전'),
+    el('span', 'badge', article.authorship || (article.reviewed ? '사람 검토 완료' : '검토 전')),
   );
   item.append(meta, heading, el('p', '', article.summary), badges);
   return item;

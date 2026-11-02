@@ -172,8 +172,15 @@ a:focus-visible, button:focus-visible { outline: 2px solid var(--blue-hover); ou
 .tldr { padding: 18px 22px; background: var(--ground); }
 .tldr h2 { margin: 0 0 4px; font-size: 15px; }
 .tldr ul { margin: 0; padding-left: 20px; }
-.prose h2 { margin: 0 0 6px; font-size: 20px; }
+.prose { overflow-wrap: anywhere; }
+.prose h2 { margin: 32px 0 8px; font-size: 22px; line-height: 1.4; }
+.prose h3 { margin: 24px 0 6px; font-size: 19px; line-height: 1.4; }
+.prose h4 { margin: 20px 0 6px; font-size: 17px; line-height: 1.4; }
+.prose > :first-child { margin-top: 0; }
 .prose p { margin: 0 0 16px; }
+.prose img { display: block; max-width: 100%; height: auto; margin: 10px 0; }
+.prose ul, .prose ol { margin: 0 0 16px; padding-left: 22px; }
+.prose li ul, .prose li ol { margin-bottom: 0; }
 .prose a { color: var(--blue); }
 .prose > :last-child { margin-bottom: 0; }
 .source-button {

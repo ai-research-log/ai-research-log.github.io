@@ -42,9 +42,10 @@ tldr:
 
 - `category`: `embedder`, `llm`, `compression`, `agent`
 - `type`: `paper`, `release`, `guide`
-- `collected_by`: `auto`, `manual`
+- `collected_by`: `auto`, `manual`. `manual`은 사람이 쓴 글입니다. 사이트에 `전체 사람 작성`으로 표시되고, `tldr_by`가 있으면 `본문 사람 작성`으로 표시됩니다.
 - `status`: `draft`(게시 안 함), `published`
 - `reviewed_by`: 검토자 이름. 비워 두면 사이트에 `검토 전`으로 표시됩니다.
+- `tldr_by`: 한 줄 소개와 세 줄 요약을 작성한 사람이 본문 작성자와 다를 때 쓰는 선택 항목입니다.
 
 본문에 `## 왜 중요한가`, `## 코멘트` 같은 제목으로 내용을 씁니다. 필수 항목이 빠지면 빌드가 실패합니다.
 

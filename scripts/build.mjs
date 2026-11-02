@@ -21,7 +21,12 @@ const escapeHtml = (value) =>
     .replaceAll('"', '&quot;');
 
 // 본문에는 에이전트가 외부 자료를 요약한 글이 들어오므로 원시 HTML은 글자로 표시한다.
-const markdown = new Marked({ renderer: { html: ({ text }) => escapeHtml(text) } });
+const markdown = new Marked({
+  renderer: {
+    html: ({ text }) => escapeHtml(text),
+    image: ({ href, text }) => `<img src="${escapeHtml(href)}" alt="${escapeHtml(text)}" loading="lazy">`,
+  },
+});
 
 // YAML 파서는 따옴표 없는 날짜를 Date로 읽는다.
 const dateText = (value) => (value instanceof Date ? value.toISOString().slice(0, 10) : String(value ?? ''));
@@ -40,6 +45,9 @@ function validate(data, file) {
   if (!/^https?:\/\//.test(data.source_url ?? '')) fail('source_url은 http(s) 주소여야 합니다');
   if (!Array.isArray(data.tldr) || data.tldr.length === 0) fail('tldr 목록이 없습니다');
   if (path.basename(path.dirname(file)) !== data.category) fail('폴더와 category가 다릅니다');
+  if (data.collected_by === 'manual' && /claude/i.test(data.summarized_by)) {
+    fail('수동 등록 글의 summarized_by는 사람이어야 합니다');
+  }
 }
 
 async function loadArticles() {
@@ -66,6 +74,12 @@ async function loadArticles() {
     (a, b) => b.published_at.localeCompare(a.published_at) || a.slug.localeCompare(b.slug),
   );
 }
+
+// 수동 등록 글은 사람이 쓴 글이다. 요약에 AI 초안이 있으면 범위를 본문으로 한정한다.
+const authorship = (article) => {
+  if (article.collected_by !== 'manual') return '';
+  return article.tldr_by ? '본문 사람 작성' : '전체 사람 작성';
+};
 
 const page = ({ title, description, base, config, body }) => `<!doctype html>
 <html lang="ko">
@@ -102,7 +116,7 @@ function renderIndex(articles, config) {
 </header>
 <main class="wrap stack">
   <section class="hero">
-    <h1>AI 기술 동향을 모아 요약합니다</h1>
+    <h1>AI 기술 동향</h1>
     <p>Embedder, LLM, 경량화, Agent 분야의 논문과 릴리스를 수집합니다. 모든 요약에 원문 링크와 수집 방식을 표시합니다.</p>
   </section>
   <section id="archive" class="archive" aria-label="기사 아카이브">
@@ -132,14 +146,24 @@ function renderArticle(article, articles, config) {
   const related = articles
     .filter((a) => a.category === article.category && a.slug !== article.slug)
     .slice(0, 2);
-  const reviewNote = article.reviewed_by
-    ? `이 요약은 ${article.summarized_by}이(가) 작성하고 ${article.reviewed_by}이(가) 검토했습니다. 정확한 내용은 원문을 확인해 주세요.`
-    : `이 요약은 ${article.summarized_by}이(가) 작성했으며 아직 운영자가 검토하지 않았습니다. 정확한 내용은 원문을 확인해 주세요.`;
+  const reviewNote = [
+    !article.reviewed_by
+      ? `이 요약은 ${article.summarized_by}이(가) 작성했으며 아직 운영자가 검토하지 않았습니다.`
+      : article.reviewed_by === article.summarized_by
+        ? `이 요약은 ${article.summarized_by}이(가) 작성했습니다.`
+        : `이 요약은 ${article.summarized_by}이(가) 작성하고 ${article.reviewed_by}이(가) 검토했습니다.`,
+    article.tldr_by ? `한 줄 소개와 세 줄 요약은 ${article.tldr_by}이(가) 초안을 작성했습니다.` : '',
+    article.body.includes('<img') ? '본문의 그림, 표, 수식은 원 논문 등 출처 자료에서 인용했으며 저작권은 원저자에게 있습니다.' : '',
+    '정확한 내용은 원문을 확인해 주세요.',
+  ]
+    .filter(Boolean)
+    .join(' ');
   const meta = [
     ['출처', article.source_name],
     ['발표', article.published_at],
     ['수집일', article.collected_at],
     ['수집', VIAS[article.collected_by]],
+    ...(authorship(article) ? [['작성', authorship(article)]] : []),
     ['요약', article.summarized_by],
     ['검토', article.reviewed_by ? `${article.reviewed_by} 확인 완료` : '검토 전'],
   ];
@@ -188,6 +212,7 @@ await rm(dist, { recursive: true, force: true });
 await mkdir(path.join(dist, 'assets'), { recursive: true });
 await mkdir(path.join(dist, 'data'), { recursive: true });
 await cp(path.join(root, 'src'), path.join(dist, 'assets'), { recursive: true });
+await cp(path.join(root, 'content/images'), path.join(dist, 'images'), { recursive: true });
 await writeFile(path.join(dist, 'index.html'), renderIndex(articles, config));
 await writeFile(
   path.join(dist, 'data/articles.json'),
@@ -202,6 +227,7 @@ await writeFile(
       via: VIAS[a.collected_by],
       summary: a.summary,
       reviewed: Boolean(a.reviewed_by),
+      authorship: authorship(a),
     })),
   ),
 );
