@@ -8,7 +8,7 @@ const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const articlesDir = path.join(root, 'content/articles');
 const dist = path.join(root, 'dist');
 
-const CATEGORIES = { embedder: 'Embedder', llm: 'LLM', compression: '경량화', agent: 'Agent' };
+const CATEGORIES = { embedder: 'Embedder', llm: 'LLM', compression: 'Compression', inference: 'Inference Optimization', agent: 'Agent', ontology: 'Ontology' };
 const TYPES = { paper: '논문', release: '릴리스', guide: '가이드' };
 const VIAS = { auto: '자동 수집', manual: '수동 등록' };
 const STATUSES = ['draft', 'published'];
@@ -107,7 +107,7 @@ function renderIndex(articles, config) {
     .join('');
   return page({
     title: `${config.handle} / ${config.siteName}`,
-    description: 'Embedder, LLM, 경량화, Agent 분야의 AI 기술 동향 요약 아카이브',
+    description: 'Embedder, LLM, Compression, Inference Optimization, Agent, Ontology 분야의 AI 기술 동향 요약 아카이브',
     base: '',
     config,
     body: `<header class="topbar">

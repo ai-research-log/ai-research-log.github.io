@@ -1,6 +1,6 @@
 # ai-research-log.github.io
 
-Embedder, LLM, 경량화, Agent 분야의 AI 기술 동향을 모아 요약하는 정적 사이트입니다.
+Embedder, LLM, Compression, Inference Optimization, Agent, Ontology 분야의 AI 기술 동향을 모아 요약하는 정적 사이트입니다.
 
 ## 실행
 
@@ -40,7 +40,7 @@ tldr:
 본문
 ```
 
-- `category`: `embedder`, `llm`, `compression`, `agent`
+- `category`: `embedder`, `llm`, `compression`, `inference`, `agent`, `ontology`
 - `type`: `paper`, `release`, `guide`
 - `collected_by`: `auto`, `manual`. `manual`은 사람이 쓴 글입니다. 사이트에 `전체 사람 작성`으로 표시되고, `tldr_by`가 있으면 `본문 사람 작성`으로 표시됩니다.
 - `status`: `draft`(게시 안 함), `published`
