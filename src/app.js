@@ -49,12 +49,6 @@ function articleItem(article) {
   const link = el('a', '', article.title);
   link.href = `articles/${article.slug}/`;
   heading.append(link);
-  const tags = el('div', 'item-tags');
-  tags.append(
-    el('span', '', article.via),
-    el('span', '', article.authorship || (article.reviewed ? '사람 검토 완료' : '검토 전')),
-  );
-  meta.append(tags);
   item.append(meta, heading, el('p', '', article.summary));
   return item;
 }
