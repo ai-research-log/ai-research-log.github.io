@@ -116,8 +116,8 @@ function renderIndex(articles, config) {
 </header>
 <main class="wrap stack">
   <section class="hero">
-    <h1>AI 기술 동향</h1>
-    <p>Embedder, LLM, 경량화, Agent 분야의 논문과 릴리스를 수집합니다. 모든 요약에 원문 링크와 수집 방식을 표시합니다.</p>
+    <h1>AI Research Trends</h1>
+    <p>주요 AI 최신 기사 및 논문들을 자동, 수동 수집합니다</p>
   </section>
   <section id="archive" class="archive" aria-label="기사 아카이브">
     <aside class="panel filters" aria-label="필터">
