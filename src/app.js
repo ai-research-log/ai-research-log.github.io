@@ -49,12 +49,12 @@ function articleItem(article) {
   const link = el('a', '', article.title);
   link.href = `articles/${article.slug}/`;
   heading.append(link);
-  const badges = el('div', 'badges');
-  badges.append(
-    el('span', article.via === '자동 수집' ? 'badge badge-auto' : 'badge badge-manual', article.via),
-    el('span', 'badge', article.authorship || (article.reviewed ? '사람 검토 완료' : '검토 전')),
+  const tags = el('div', 'item-tags');
+  tags.append(
+    el('span', '', article.via),
+    el('span', '', article.authorship || (article.reviewed ? '사람 검토 완료' : '검토 전')),
   );
-  meta.append(badges);
+  meta.append(tags);
   item.append(meta, heading, el('p', '', article.summary));
   return item;
 }
