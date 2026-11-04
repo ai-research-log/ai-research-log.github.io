@@ -1,11 +1,13 @@
 const CATEGORIES = ['전체', 'Embedder', 'LLM', '경량화', 'Agent'];
 const VIAS = ['전체', '자동 수집', '수동 등록'];
+const PAGE_SIZE = 10;
 
 const params = new URLSearchParams(location.search);
 const pick = (value, allowed) => (allowed.includes(value) ? value : '전체');
 const state = {
   category: pick(params.get('category'), CATEGORIES),
   via: pick(params.get('via'), VIAS),
+  page: Math.max(1, Number.parseInt(params.get('page'), 10) || 1),
 };
 let articles = [];
 
@@ -16,14 +18,64 @@ function el(tag, className, text) {
   return node;
 }
 
-function select(key, value) {
-  state[key] = value;
+function syncUrl() {
   const next = new URLSearchParams();
   if (state.category !== '전체') next.set('category', state.category);
   if (state.via !== '전체') next.set('via', state.via);
+  if (state.page > 1) next.set('page', String(state.page));
   const query = next.toString();
   history.replaceState(null, '', query ? `?${query}` : location.pathname);
+}
+
+function select(key, value) {
+  state[key] = value;
+  state.page = 1;
+  syncUrl();
   render();
+}
+
+function goToPage(page) {
+  state.page = page;
+  syncUrl();
+  render();
+  document.getElementById('archive').scrollIntoView({ block: 'start' });
+}
+
+// 페이지가 많으면 처음·끝과 현재 주변만 보여 주고 나머지는 '…'로 줄입니다.
+function pageNumbers(current, total) {
+  if (total <= 7) return Array.from({ length: total }, (_, i) => i + 1);
+  const pages = [1];
+  const start = Math.max(2, Math.min(current - 1, total - 4));
+  const end = Math.min(total - 1, Math.max(current + 1, 5));
+  if (start > 2) pages.push('…');
+  for (let p = start; p <= end; p += 1) pages.push(p);
+  if (end < total - 1) pages.push('…');
+  pages.push(total);
+  return pages;
+}
+
+function pageButton(label, page, { current = false, disabled = false, ariaLabel } = {}) {
+  const button = el('button', 'page-button', label);
+  button.type = 'button';
+  if (ariaLabel) button.setAttribute('aria-label', ariaLabel);
+  if (current) button.setAttribute('aria-current', 'page');
+  button.disabled = disabled || current;
+  if (!button.disabled) button.addEventListener('click', () => goToPage(page));
+  return button;
+}
+
+function pagination(totalPages) {
+  if (totalPages <= 1) return [];
+  const current = state.page;
+  return [
+    pageButton('이전', current - 1, { disabled: current === 1, ariaLabel: '이전 페이지' }),
+    ...pageNumbers(current, totalPages).map((p) =>
+      p === '…'
+        ? el('span', 'page-gap', '…')
+        : pageButton(String(p), p, { current: p === current, ariaLabel: `${p}페이지` }),
+    ),
+    pageButton('다음', current + 1, { disabled: current === totalPages, ariaLabel: '다음 페이지' }),
+  ];
 }
 
 function filterButton(key, value, count) {
@@ -56,6 +108,12 @@ function articleItem(article) {
 function render() {
   const byVia = articles.filter((a) => state.via === '전체' || a.via === state.via);
   const visible = byVia.filter((a) => state.category === '전체' || a.category === state.category);
+  const totalPages = Math.max(1, Math.ceil(visible.length / PAGE_SIZE));
+  if (state.page > totalPages) {
+    state.page = totalPages;
+    syncUrl();
+  }
+  const pageItems = visible.slice((state.page - 1) * PAGE_SIZE, state.page * PAGE_SIZE);
 
   document.getElementById('category-filter').replaceChildren(
     ...CATEGORIES.map((category) =>
@@ -72,9 +130,12 @@ function render() {
     .getElementById('article-list')
     .replaceChildren(
       ...(visible.length
-        ? visible.map(articleItem)
+        ? pageItems.map(articleItem)
         : [el('p', 'empty', articles.length ? '이 조건에 맞는 기사가 없습니다. 다른 필터를 선택해 보세요.' : '아직 게시한 기사가 없습니다.')]),
     );
+  const nav = document.getElementById('pagination');
+  nav.replaceChildren(...pagination(totalPages));
+  nav.hidden = totalPages <= 1;
 }
 
 fetch('data/articles.json')

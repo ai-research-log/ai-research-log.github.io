@@ -112,13 +112,40 @@ a:focus-visible, button:focus-visible { outline: 2px solid var(--blue-hover); ou
   flex-wrap: wrap;
   gap: 4px 12px;
   font-family: var(--mono);
-  font-size: 10.4px;
+  font-size: 11.7px;
   color: var(--label);
 }
 .item-category { font-weight: 600; color: var(--blue); }
-.item h3 { margin: 0; font-size: 15.2px; line-height: 1.4; font-weight: 600; overflow-wrap: anywhere; }
-.item p { margin: 0; color: var(--muted); font-size: 12px; }
+.item h3 { margin: 0; font-size: 17.1px; line-height: 1.4; font-weight: 600; overflow-wrap: anywhere; }
+.item p { margin: 0; color: var(--muted); font-size: 13.5px; }
 .empty { margin: 0; padding: 32px 20px; color: var(--muted); }
+.pagination {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 6px;
+  padding: 14px 20px;
+  border-top: 1px solid var(--line);
+  font-family: var(--mono);
+  font-size: 13px;
+}
+.pagination[hidden] { display: none; }
+.page-button {
+  min-width: 44px;
+  min-height: 44px;
+  padding: 0 12px;
+  border: 1px solid var(--line);
+  border-radius: 3px;
+  background: var(--surface);
+  color: var(--ink);
+  font: inherit;
+  cursor: pointer;
+}
+.page-button:hover:not(:disabled) { background: var(--ground); }
+.page-button:disabled { color: var(--label); cursor: default; }
+.page-button[aria-current='page'] { background: var(--ink); border-color: var(--ink); color: #fff; }
+.page-gap { padding: 0 4px; color: var(--label); }
 .fallback { margin: 0; padding: 18px 20px 18px 40px; }
 
 .about {
@@ -147,7 +174,7 @@ a:focus-visible, button:focus-visible { outline: 2px solid var(--blue-hover); ou
   margin: 24px auto 32px;
   padding: 40px var(--gutter) 48px;
   background: var(--surface);
-  font-size: 17px;
+  font-size: 13.6px;
   line-height: 1.75;
 }
 .detail-main { flex: 999 1 520px; min-width: 0; display: flex; flex-direction: column; gap: 24px; }

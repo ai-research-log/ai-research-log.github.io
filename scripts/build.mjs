@@ -127,6 +127,7 @@ function renderIndex(articles, config) {
     <div class="panel results">
       <div id="result-label" class="result-label" role="status">기사를 불러오는 중입니다</div>
       <div id="article-list"></div>
+      <nav id="pagination" class="pagination" aria-label="페이지" hidden></nav>
       <noscript><ul class="fallback">${fallback}</ul></noscript>
     </div>
   </section>
