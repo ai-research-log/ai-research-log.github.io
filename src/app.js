@@ -54,7 +54,8 @@ function articleItem(article) {
     el('span', article.via === '자동 수집' ? 'badge badge-auto' : 'badge badge-manual', article.via),
     el('span', 'badge', article.authorship || (article.reviewed ? '사람 검토 완료' : '검토 전')),
   );
-  item.append(meta, heading, el('p', '', article.summary), badges);
+  meta.append(badges);
+  item.append(meta, heading, el('p', '', article.summary));
   return item;
 }
 
