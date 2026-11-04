@@ -162,11 +162,6 @@ function renderArticle(article, articles, config) {
   const meta = [
     ['출처', article.source_name],
     ['발표', article.published_at],
-    ['수집일', article.collected_at],
-    ['수집', VIAS[article.collected_by]],
-    ...(authorship(article) ? [['작성', authorship(article)]] : []),
-    ['요약', article.summarized_by],
-    ['검토', article.reviewed_by ? `${article.reviewed_by} 확인 완료` : '검토 전'],
   ];
   return page({
     title: `${article.title} | ${config.handle}`,
