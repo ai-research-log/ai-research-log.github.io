@@ -1,4 +1,4 @@
-const CATEGORIES = ['전체', 'Embedder', 'LLM', 'Compression', 'Inference Optimization', 'Agent', 'Ontology'];
+const CATEGORIES = ['전체', 'Embedder', 'LLM', 'Compression', 'Inference Optimization', 'Agent', 'Ontology', 'OCR / VLM'];
 const VIAS = ['전체', '자동 수집', '수동 등록'];
 const PAGE_SIZE = 10;
 
